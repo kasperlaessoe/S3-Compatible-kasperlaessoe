@@ -30,6 +30,7 @@ from .const import (
     DESCRIPTION_AWS_S3_DOCS_URL,
     DESCRIPTION_BOTO3_DOCS_URL,
     DOMAIN,
+    preload_botocore_data,
 )
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
@@ -66,6 +67,7 @@ class S3ConfigFlow(ConfigFlow, domain=DOMAIN):
                 }
             )
 
+            await self.hass.async_add_executor_job(preload_botocore_data)
             try:
                 async with get_session().create_client(
                     "s3",

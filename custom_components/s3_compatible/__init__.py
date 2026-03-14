@@ -23,6 +23,7 @@ from .const import (
     CONF_VERIFY,
     DATA_BACKUP_AGENT_LISTENERS,
     DOMAIN,
+    preload_botocore_data,
 )
 
 type S3ConfigEntry = ConfigEntry[S3Client]
@@ -33,6 +34,7 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: S3ConfigEntry) -> bool:
     """Set up S3 from a config entry."""
+    await hass.async_add_executor_job(preload_botocore_data)
 
     data = cast("dict", entry.data)
     try:
